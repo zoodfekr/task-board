@@ -1,0 +1,264 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Vazir", "B Nazanin", Tahoma, sans-serif;
+}
+
+@font-face {
+  font-family: "Vazir";
+  src: url("/fonts/Vazir-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vazir";
+  src: url("/fonts/Vazir-Medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vazir";
+  src: url("/fonts/Vazir-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  font-family: var(--font-sans);
+  color: #0f172a;
+  background: #f8fafc;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { width: 100%; min-width: 320px; min-height: 100%; margin: 0; }
+body { min-height: 100vh; }
+button, input, textarea, select, option, optgroup {
+  font-family: inherit;
+}
+
+/* The calendar supplies its own font and may render outside the form. */
+.rmdp-wrapper,
+.rmdp-container,
+.rmdp-input,
+.rmdp-wrapper * {
+  font-family: var(--font-sans);
+}
+
+/* Use the locally installed B Nazanin for display headings when available. */
+h1, h2, h3 {
+  font-family: "B Nazanin", "Vazir", Tahoma, sans-serif;
+}
+
+.tack-date-picker .rmdp-container {
+  min-width: 0;
+  flex: 1;
+}
+
+.tack-date-picker .rmdp-input {
+  width: 100%;
+  height: 2.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #fff;
+  padding: 0 0.75rem;
+  color: #0f172a;
+  text-align: right;
+  outline: none;
+  box-shadow: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.tack-date-picker .rmdp-input:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgb(224 231 255 / 80%);
+}
+
+.tack-date-picker .rmdp-wrapper {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 18px 50px rgb(15 23 42 / 18%);
+}
+
+.tack-date-picker .rmdp-calendar {
+  padding: 0.75rem;
+}
+
+.tack-date-picker .rmdp-header {
+  margin: 0 0 0.5rem;
+}
+
+.tack-date-picker .rmdp-header-values {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.tack-date-picker .rmdp-week-day {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.tack-date-picker .rmdp-day.rmdp-selected span:not(.highlight) {
+  background-color: #4f46e5;
+  box-shadow: none;
+}
+
+.tack-date-picker .rmdp-day.rmdp-today span {
+  background-color: #eef2ff;
+  color: #4338ca;
+}
+
+.tack-date-picker .rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  background: #0b1120;
+  color: #e2e8f0;
+}
+
+html[data-theme="dark"] body,
+html[data-theme="dark"] #root,
+html[data-theme="dark"] .tack-app-shell {
+  background-color: #0b1120 !important;
+  color: #e2e8f0;
+}
+
+html[data-theme="dark"] .tack-main,
+html[data-theme="dark"] .tack-header,
+html[data-theme="dark"] .tack-dialog {
+  background-color: #111827 !important;
+  border-color: #263244 !important;
+}
+
+html[data-theme="dark"] .tack-column {
+  background-color: #151e2e !important;
+  border-color: #2a3547 !important;
+}
+
+html[data-theme="dark"] .tack-card {
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .tack-header .text-indigo-950 {
+  color: #c7d2fe !important;
+}
+
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-white\/70,
+html[data-theme="dark"] .bg-white\/80 {
+  background-color: #172133 !important;
+}
+
+html[data-theme="dark"] .bg-slate-50,
+html[data-theme="dark"] .bg-slate-50\/70,
+html[data-theme="dark"] .bg-slate-100 {
+  background-color: #1b2638 !important;
+}
+
+html[data-theme="dark"] .bg-slate-200\/70 {
+  background-color: #2a3547 !important;
+}
+
+html[data-theme="dark"] .text-slate-900,
+html[data-theme="dark"] .text-slate-800,
+html[data-theme="dark"] .text-slate-700 {
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .text-slate-600,
+html[data-theme="dark"] .text-slate-500 {
+  color: #a8b4c7 !important;
+}
+
+html[data-theme="dark"] .text-slate-400 {
+  color: #8593a8 !important;
+}
+
+html[data-theme="dark"] .border-slate-100,
+html[data-theme="dark"] .border-slate-200,
+html[data-theme="dark"] .border-slate-200\/70,
+html[data-theme="dark"] .border-slate-200\/90,
+html[data-theme="dark"] .border-slate-300 {
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .tack-header input,
+html[data-theme="dark"] .tack-header select,
+html[data-theme="dark"] .tack-dialog input,
+html[data-theme="dark"] .tack-dialog textarea,
+html[data-theme="dark"] .tack-dialog select {
+  background-color: #172133 !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .tack-header input::placeholder,
+html[data-theme="dark"] .tack-dialog input::placeholder,
+html[data-theme="dark"] .tack-dialog textarea::placeholder {
+  color: #8593a8 !important;
+}
+
+html[data-theme="dark"] .tack-date-picker .rmdp-wrapper {
+  background-color: #172133;
+  border-color: #334155;
+}
+
+html[data-theme="dark"] .tack-date-picker .rmdp-header-values,
+html[data-theme="dark"] .tack-date-picker .rmdp-day {
+  color: #e2e8f0;
+}
+
+/* Keep each sticky-note color distinct while replacing the washed-out pastels in dark mode. */
+html[data-theme="dark"] .tack-card[data-note-color="yellow"] {
+  background-color: #332b19 !important;
+  border-color: #514425 !important;
+  border-inline-start-color: #d6aa3f !important;
+}
+
+html[data-theme="dark"] .tack-card[data-note-color="pink"] {
+  background-color: #33212a !important;
+  border-color: #553342 !important;
+  border-inline-start-color: #db7f9c !important;
+}
+
+html[data-theme="dark"] .tack-card[data-note-color="blue"] {
+  background-color: #1d2a3a !important;
+  border-color: #344b65 !important;
+  border-inline-start-color: #6caeea !important;
+}
+
+html[data-theme="dark"] .tack-card[data-note-color="green"] {
+  background-color: #1d2d27 !important;
+  border-color: #315144 !important;
+  border-inline-start-color: #61bd92 !important;
+}
+
+html[data-theme="dark"] .tack-card[data-note-color="purple"] {
+  background-color: #29243a !important;
+  border-color: #453b62 !important;
+  border-inline-start-color: #a68ae8 !important;
+}
+
+html[data-theme="dark"] .tack-card[data-note-color="orange"] {
+  background-color: #33251b !important;
+  border-color: #59402b !important;
+  border-inline-start-color: #e79a52 !important;
+}
+
+html[data-theme="dark"] .tack-card .text-slate-500 {
+  color: #c0cad8 !important;
+}
