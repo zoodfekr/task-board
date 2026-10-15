@@ -32,7 +32,3 @@ export function isAutostartEnabled(): Promise<boolean> {
 export function setAutostartEnabled(enabled: boolean): Promise<boolean> {
   return invoke("set_autostart_enabled", { enabled });
 }
-
-export function sendTestNotification(): Promise<void> {
-  return invoke("send_test_notification");
-}

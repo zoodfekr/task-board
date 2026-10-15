@@ -79,7 +79,6 @@ pub fn run() {
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             desktop::show_main_window(app);
         }))
-        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_autostart::init(
             tauri_plugin_autostart::MacosLauncher::LaunchAgent,
             Some(vec!["--background"]),
@@ -94,7 +93,8 @@ pub fn run() {
             reminders::dismiss_reminder,
             desktop::is_autostart_enabled,
             desktop::set_autostart_enabled,
-            desktop::send_test_notification,
+            desktop::get_always_on_top,
+            desktop::set_always_on_top,
         ])
         .setup(|app| {
             desktop::setup(app)?;

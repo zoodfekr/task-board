@@ -5,7 +5,6 @@ use tauri::{
     App, AppHandle, Manager,
 };
 use tauri_plugin_autostart::ManagerExt;
-use tauri_plugin_notification::NotificationExt;
 
 pub fn show_main_window(app: &AppHandle) {
     if let Some(window) = app.get_webview_window("main") {
@@ -13,6 +12,63 @@ pub fn show_main_window(app: &AppHandle) {
         let _ = window.show();
         let _ = window.set_focus();
     }
+}
+
+#[tauri::command]
+pub fn get_always_on_top(app: AppHandle) -> Result<bool, String> {
+    app.get_webview_window("main")
+        .ok_or_else(|| "پنجرهٔ اصلی Tack پیدا نشد.".to_string())?
+        .is_always_on_top()
+        .map_err(|error| error.to_string())
+}
+
+#[tauri::command]
+pub fn set_always_on_top(app: AppHandle, enabled: bool) -> Result<bool, String> {
+    let window = app.get_webview_window("main")
+        .ok_or_else(|| "پنجرهٔ اصلی Tack پیدا نشد.".to_string())?;
+    window.set_always_on_top(enabled).map_err(|error| error.to_string())?;
+    let actual = window.is_always_on_top().map_err(|error| error.to_string())?;
+    if actual != enabled {
+        return Err("ویندوز وضعیت همیشه‌رو را اعمال نکرد.".to_string());
+    }
+    Ok(actual)
+}
+
+pub fn show_reminder_window(app: &AppHandle) {
+    if let Some(window) = app.get_webview_window("reminder") {
+        let _ = window.show();
+        let _ = window.set_focus();
+        return;
+    }
+
+    let (x, y) = app.primary_monitor().ok().flatten().map(|monitor| {
+        let scale = monitor.scale_factor();
+        let origin = monitor.position();
+        let size = monitor.size();
+        let width = 440.0;
+        let height = 420.0;
+        (
+            origin.x as f64 / scale + size.width as f64 / scale - width - 20.0,
+            origin.y as f64 / scale + size.height as f64 / scale - height - 55.0,
+        )
+    }).unwrap_or((20.0, 20.0));
+
+    let _ = tauri::WebviewWindowBuilder::new(
+        app,
+        "reminder",
+        tauri::WebviewUrl::App("index.html?window=reminder".into()),
+    )
+    .title("یادآور Tack")
+    .inner_size(440.0, 420.0)
+    .position(x, y)
+    .decorations(false)
+    .transparent(true)
+    .always_on_top(true)
+    .skip_taskbar(true)
+    .resizable(false)
+    .shadow(false)
+    .focused(false)
+    .build();
 }
 
 pub fn setup(app: &App) -> tauri::Result<()> {
@@ -74,13 +130,4 @@ pub fn set_autostart_enabled(app: AppHandle, enabled: bool) -> Result<bool, Stri
         manager.disable()
     }.map_err(|error| error.to_string())?;
     manager.is_enabled().map_err(|error| error.to_string())
-}
-
-#[tauri::command]
-pub fn send_test_notification(app: AppHandle) -> Result<(), String> {
-    app.notification().builder()
-        .title("اعلان آزمایشی Task Board")
-        .body("یادآوری‌ها حتی با پنجرهٔ بسته یا مینیمایز از اینجا نمایش داده می‌شوند.")
-        .show()
-        .map_err(|error| error.to_string())
 }

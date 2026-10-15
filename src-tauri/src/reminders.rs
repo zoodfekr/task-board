@@ -2,7 +2,6 @@ use std::time::Duration;
 use serde::Serialize;
 use sqlx::{Row, SqlitePool};
 use tauri::{AppHandle, Emitter, Manager};
-use tauri_plugin_notification::NotificationExt;
 use tauri_plugin_sql::{DbInstances, DbPool};
 
 const DATABASE_URL: &str = "sqlite:tack.db";
@@ -62,7 +61,6 @@ async fn deliver_due(app: &AppHandle, pool: &SqlitePool) -> Result<(), String> {
             tx.rollback().await.map_err(|error| error.to_string())?;
             continue;
         };
-        let title: String = row.get("title");
         let delivery = ReminderDelivery {
             task_id: id,
             reminder_at: row.get("reminder_at"),
@@ -71,14 +69,18 @@ async fn deliver_due(app: &AppHandle, pool: &SqlitePool) -> Result<(), String> {
         sqlx::query(SAVE_DELIVERY)
             .bind(&delivery.task_id).bind(&delivery.reminder_at).bind(&delivery.delivered_at)
             .execute(&mut *tx).await.map_err(|error| error.to_string())?;
-        // On a preparation error the transaction rolls back, leaving it eligible
-        // for retry. A saved inbox also covers OS-suppressed notification banners.
-        app.notification().builder()
-            .title("یادآور Task Board")
-            .body(format!("زمان انجام «{title}» رسیده است."))
-            .show().map_err(|error| error.to_string())?;
         tx.commit().await.map_err(|error| error.to_string())?;
         let _ = app.emit("reminder-delivered", &delivery);
+        // Windows owns the look of native toast banners. Use Tack's own small
+        // WebView window when the board is hidden so the reminder keeps its UI.
+        let main_is_visible = app.get_webview_window("main")
+            .and_then(|window| window.is_visible().ok().map(|visible| {
+                visible && !window.is_minimized().unwrap_or(false)
+            }))
+            .unwrap_or(false);
+        if !main_is_visible {
+            crate::desktop::show_reminder_window(app);
+        }
     }
     Ok(())
 }

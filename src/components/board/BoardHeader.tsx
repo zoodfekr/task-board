@@ -1,7 +1,7 @@
 ﻿import { useEffect, useState } from "react";
-import { getCurrentWindow } from "@tauri-apps/api/window";
 import type { StickyNoteColor, TaskPriority } from "../../types/task";
 import { ReminderSettings } from "./ReminderSettings";
+import { applyAlwaysOnTop, getAlwaysOnTop } from "../../lib/windowControls";
 
 export type ColorFilter = StickyNoteColor | "all";
 export type PriorityFilter = TaskPriority | "all";
@@ -80,7 +80,7 @@ export function BoardHeader({
       return;
     }
     let alive = true;
-    getCurrentWindow().isAlwaysOnTop()
+    getAlwaysOnTop()
       .then((value) => { if (alive) setAlwaysOnTop(value); })
       .catch(() => { if (alive) setError("خواندن وضعیت پنجره ناموفق بود."); })
       .finally(() => { if (alive) setReady(true); });
@@ -92,10 +92,10 @@ export function BoardHeader({
     setBusy(true);
     setError(null);
     try {
-      await getCurrentWindow().setAlwaysOnTop(next);
-      setAlwaysOnTop(next);
-    } catch {
-      setError("تغییر وضعیت همیشه‌رو ناموفق بود؛ مجوز پنجره را بررسی کنید.");
+      const actual = await applyAlwaysOnTop(next);
+      setAlwaysOnTop(actual);
+    } catch (cause) {
+      setError(cause instanceof Error ? `تغییر وضعیت همیشه‌رو ناموفق بود: ${cause.message}` : "تغییر وضعیت همیشه‌رو ناموفق بود.");
     } finally {
       setBusy(false);
     }
