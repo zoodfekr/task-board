@@ -23,15 +23,22 @@ pub fn get_always_on_top(app: AppHandle) -> Result<bool, String> {
 }
 
 #[tauri::command]
-pub fn set_always_on_top(app: AppHandle, enabled: bool) -> Result<bool, String> {
+pub async fn set_always_on_top(app: AppHandle, enabled: bool) -> Result<bool, String> {
     let window = app.get_webview_window("main")
         .ok_or_else(|| "پنجرهٔ اصلی Tack پیدا نشد.".to_string())?;
     window.set_always_on_top(enabled).map_err(|error| error.to_string())?;
-    let actual = window.is_always_on_top().map_err(|error| error.to_string())?;
-    if actual != enabled {
-        return Err("ویندوز وضعیت همیشه‌رو را اعمال نکرد.".to_string());
+
+    // Wry queues this window change onto the UI thread. Poll briefly so the
+    // getter does not race the queued Windows operation and report stale state.
+    for _ in 0..40 {
+        let actual = window.is_always_on_top().map_err(|error| error.to_string())?;
+        if actual == enabled {
+            return Ok(actual);
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(25)).await;
     }
-    Ok(actual)
+
+    Err("ویندوز وضعیت همیشه‌رو را اعمال نکرد؛ دوباره تلاش کنید.".to_string())
 }
 
 pub fn show_reminder_window(app: &AppHandle) {

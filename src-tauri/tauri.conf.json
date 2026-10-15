@@ -25,7 +25,8 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis", "msi"]
+    "targets": ["nsis", "msi"],
+    "icon": ["icons/icon.ico"]
   },
   "plugins": {
     "sql": {
