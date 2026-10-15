@@ -73,6 +73,20 @@ h1, h2, h3 {
   font-family: var(--font-sans);
 }
 
+.tack-always-on-top[aria-pressed="true"] {
+  border-color: #a5b4fc;
+  background-color: #eef2ff;
+  color: #4338ca;
+  box-shadow: inset 0 0 0 1px rgb(99 102 241 / 22%), 0 2px 8px rgb(79 70 229 / 12%);
+}
+
+html[data-theme="dark"] .tack-always-on-top[aria-pressed="true"] {
+  border-color: #6366f1 !important;
+  background-color: #312e81 !important;
+  color: #e0e7ff !important;
+  box-shadow: inset 0 0 0 1px rgb(165 180 252 / 25%), 0 2px 10px rgb(0 0 0 / 28%);
+}
+
 .tack-date-picker .rmdp-container {
   min-width: 0;
   flex: 1;

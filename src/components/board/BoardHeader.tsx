@@ -130,9 +130,9 @@ export function BoardHeader({
           )}
 
           {windowControlsEnabled && (
-            <button type="button" onClick={() => void toggleAlwaysOnTop()} disabled={!ready || busy} aria-pressed={alwaysOnTop} title={alwaysOnTop ? "خاموش‌کردن همیشه‌رو" : "نمایش پنجره روی پنجره‌های دیگر"} className={`${controlClass} ${alwaysOnTop ? "border-indigo-200 bg-indigo-50 text-indigo-700" : ""}`}>
-              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="h-4 w-4"><path d="m10 2.8 2 3.4 3.9.7-2.7 2.8.5 3.9-3.7-1.8-3.7 1.8.5-3.9-2.7-2.8 3.9-.7 2-3.4Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" /></svg>
-              <span>همیشه‌رو</span>
+            <button type="button" onClick={() => void toggleAlwaysOnTop()} disabled={!ready || busy} aria-pressed={alwaysOnTop} title={alwaysOnTop ? "خاموش‌کردن همیشه‌رو" : "نمایش پنجره روی پنجره‌های دیگر"} className={`${controlClass} tack-always-on-top ${alwaysOnTop ? "border-indigo-200 bg-indigo-50 text-indigo-700" : ""}`}>
+              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="h-4 w-4"><path d="m10 2.8 2 3.4 3.9.7-2.7 2.8.5 3.9-3.7-1.8-3.7 1.8.5-3.9-2.7-2.8 3.9-.7 2-3.4Z" fill={alwaysOnTop ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" /></svg>
+              <span>{alwaysOnTop ? "همیشه‌رو روشن" : "همیشه‌رو"}</span>
             </button>
           )}
 
